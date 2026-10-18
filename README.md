@@ -1,10 +1,5 @@
 # Does Genre Make an Indian Film Pay Off?
 ### Studying the Relationship Between Genre, Budget, and Box Office Performance
-
-[![Course](https://img.shields.io/badge/Course-CS%20215%3A%20Data%20Analysis%20%26%20Interpretation-blue)](#)
-[![Institution](https://img.shields.io/badge/Institution-IIT%20Bombay-red)](#)
-[![Python](https://img.shields.io/badge/Python-3.9%2B-brightgreen)](#)
-
 ---
 
 ## Overview
