@@ -37,17 +37,17 @@ We examine the commercial dynamics of Indian cinema by studying how a film's **g
 
 ## Data Sources & Entity Resolution
 
-Data is collected, harmonized, and cross-validated across multiple databases[cite: 1]:
+Data is collected, harmonized, and cross-validated across multiple databases:
 
-* **[IMDb Non-Commercial Datasets](https://developer.imdb.com/non-commercial-datasets/):** Film title, release year, runtime, primary genres, average rating, votes, and principal cast/crew credits[cite: 1].
+* **[IMDb Non-Commercial Datasets](https://developer.imdb.com/non-commercial-datasets/):** Film title, release year, runtime, primary genres, average rating, votes, and principal cast/crew credits.
 * **Curated Box-Office Repositories & Kaggle Datasets:**
-  * [Bollywood Movies Box Office Collection (2022)](https://www.kaggle.com/datasets/shivanirana63/bollywood-movies-boxoffice-collection-2022)[cite: 1]
-  * [Bollywood Release Movie Dataset](https://www.kaggle.com/datasets/slmsshk/bollywood-release-movie-dataset)[cite: 1]
-  * [IMDb Dataset - All Indian Movies](https://www.kaggle.com/datasets/dhirajbembade/imdb-dataset-all-indian-movies)[cite: 1]
-  * [Bollywood Movies IMDb Rating](https://www.kaggle.com/datasets/adrianmcmahon/bollywood-movies-imdb-rating)[cite: 1]
-  * [IMDb Curated List](https://www.imdb.com/list/1s521560849/)[cite: 1]
-* **Supplementary Industry Data:** TMDb and published trade reports for cross-verifying financial data[cite: 1].
-* **Record Linkage:** Entity resolution via canonical `tconst` (IMDb ID) matched against normalized title strings and release years[cite: 1].
+  * [Bollywood Movies Box Office Collection (2022)](https://www.kaggle.com/datasets/shivanirana63/bollywood-movies-boxoffice-collection-2022)
+  * [Bollywood Release Movie Dataset](https://www.kaggle.com/datasets/slmsshk/bollywood-release-movie-dataset)
+  * [IMDb Dataset - All Indian Movies](https://www.kaggle.com/datasets/dhirajbembade/imdb-dataset-all-indian-movies)
+  * [Bollywood Movies IMDb Rating](https://www.kaggle.com/datasets/adrianmcmahon/bollywood-movies-imdb-rating)
+  * [IMDb Curated List](https://www.imdb.com/list/1s521560849/)
+* **Supplementary Industry Data:** TMDb and published trade reports for cross-verifying financial data.
+* **Record Linkage:** Entity resolution via canonical `tconst` (IMDb ID) matched against normalized title strings and release years.
 
 ---
 
