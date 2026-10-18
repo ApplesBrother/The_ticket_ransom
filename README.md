@@ -8,6 +8,12 @@ This repository hosts the code, datasets, and analysis for our **CS 215 (Data An
 
 We examine the commercial dynamics of Indian cinema by studying how a film's **genre** correlates with its financial returns relative to production costs. Specifically, we test whether the prevailing perception of **action films** holding superior commercial leverage holds true under rigorous statistical testing.
 
+## Team Members (IIT Bombay)
+* Rujul (25B0937)
+* Kavya (25B0947)
+* Arnav Jindal (25B1087)
+* Rajit Gupta (25B0938)
+
 ---
 
 ## Research Question & Hypotheses
@@ -20,34 +26,41 @@ We examine the commercial dynamics of Indian cinema by studying how a film's **g
 
 ---
 
-## Methodology & Statistical Pipeline
+## Project Evolution & Implementation Process
 
-1. **Sample Construction & Bias Auditing:**
-   * Targeting a sample of **~500+ Indian films** across varying budget tiers.
-   * Ensuring inclusion of low/mid-budget productions alongside blockbusters, actively tracking and documenting selection/survivorship bias.
-2. **Metrics:**
-   * Primary Target: **Revenue-to-Budget Ratio** (financial multiplier / return on investment proxy).
-   * Secondary Metric: **IMDb Ratings & User Votes** (critical vs. commercial divergence).
-3. **Statistical Techniques:**
-   * **Bootstrapping & Confidence Intervals:** Evaluating genre-wise median revenue-to-budget distributions without assuming normality.
-   * **Multivariate Regression & Controls:** Isolating genre coefficients while controlling for release year, runtime, star cast, and original language.
-   * **Sensitivity Analysis:** Auditing genuine high-grossing outliers and testing model stability with and without extreme data points.
+Our data pipeline evolved iteratively to handle messy, multi-source records, currency discrepancies, and conflicting box office figures across independent archives. Below is how our workflow transitioned from raw ingestion to analysis-ready models:
+
+### Phase 1: Ingestion & Unit Standardization
+* **The Challenge:** Raw data dumps utilized vastly different formatting standards, scattered date notations, and mixed currency representations (e.g., raw INR integers like `5000000` vs. pre-computed Crores).
+* **The Fix:** We ingested 7 distinct source files, built regex parsers to extract standard 4-digit release years, and unified all financial metrics into standardized **₹ Crores** (`1e7` scaling applied where necessary).
+
+### Phase 2: From Blind Deduplication to Source Provenance Tracking
+* **Initial Plan:** Merge all datasets immediately by collapsing duplicates into a single master row.
+* **Real-World Pivot:** Recognizing that different scrapers (e.g., historical archives vs. modern box office trackers) report conflicting figures, we modified our pipeline (`src/clean_data.py`) to **stack** core sources (`05`, `06`, `07`) side-by-side. This ensures overlapping movies appear repeatedly with a mandatory `source_file` tag for complete auditability.
+
+### Phase 3: Hierarchical Conflict Resolution & Consolidation
+* **The Challenge:** Overlapping films frequently presented conflicting budgets or revenues across scrapers.
+* **The Fix:** We implemented a prioritized conflict-resolution pipeline (`src/consolidate_data.py`). Grouping by normalized title keys, we established a reliability hierarchy (**Modern Box Office (`06_shreyaumrao`) $\rightarrow$ Case Studies (`07_iima`) $\rightarrow$ General Archives (`05_ishajangir`)**). Source audit trails are concatenated (e.g., `source1 | source2`), and final records are sorted alphabetically.
+
+### Phase 4: Compact Views & Analysis-Ready Filtering
+* **Compact Mapping (`src/generate_compact.py`):** Extracted a streamlined 7-column view focusing strictly on `title`, `year`, `genres`, `budget_cr`, `india_net_rev_cr`, `source_file`, and `rev_to_budget_ratio`.
+* **Strict Filtering (`src/filter_subset.py`):** Stripped away release year noise and filtered out rows with missing vital signs, yielding a clean subset of fully verified films ready for statistical testing.
+
+### Phase 5: Automated Exploratory Data Analysis (EDA)
+* **Statistical Rigor (`src/eda_analysis.py`):** Built automated scripts to compute median/mean ROI, success rates (% profitable films), and execute non-parametric **Kruskal-Wallis H-tests** to verify whether genre-based return variances are statistically significant.
 
 ---
 
 ## Data Sources & Entity Resolution
 
-Data is collected, harmonized, and cross-validated across multiple databases:
-
-* **[IMDb Non-Commercial Datasets](https://developer.imdb.com/non-commercial-datasets/):** Film title, release year, runtime, primary genres, average rating, votes, and principal cast/crew credits.
-* **Curated Box-Office Repositories & Kaggle Datasets:**
-  * [Bollywood Movies Box Office Collection (2022)](https://www.kaggle.com/datasets/shivanirana63/bollywood-movies-boxoffice-collection-2022)
-  * [Bollywood Release Movie Dataset](https://www.kaggle.com/datasets/slmsshk/bollywood-release-movie-dataset)
-  * [IMDb Dataset - All Indian Movies](https://www.kaggle.com/datasets/dhirajbembade/imdb-dataset-all-indian-movies)
-  * [Bollywood Movies IMDb Rating](https://www.kaggle.com/datasets/adrianmcmahon/bollywood-movies-imdb-rating)
-  * [IMDb Curated List](https://www.imdb.com/list/1s521560849/)
-* **Supplementary Industry Data:** TMDb and published trade reports for cross-verifying financial data.
-* **Record Linkage:** Entity resolution via canonical `tconst` (IMDb ID) matched against normalized title strings and release years.
+Data was collected, harmonized, and cross-validated across 7 open-source repositories:
+1. `01_shivanirana63_bo2022.csv` (2022 Box Office supplement)
+2. `02_slmsshk_release_data.csv` (Historical lifetime collections)
+3. `03_dhirajbembade_imdb_india.csv` (IMDb catalog: genres, ratings, votes)
+4. `04_adrianmcmahon_imdb_950.csv` (Top 950 Bollywood ratings)
+5. `05_ishajangir_bollywood.csv` (~1,700 historical films in raw INR)
+6. `06_shreyaumrao_bo2019_2023.csv` (Modern box office collections)
+7. `07_iima_bollywood.csv` (IIM Ahmedabad case study dataset)
 
 ---
 
@@ -55,19 +68,15 @@ Data is collected, harmonized, and cross-validated across multiple databases:
 
 ```text
 ├── data/
-│   ├── raw/                # Unaltered source tables and scraped extracts
-│   ├── processed/          # Cleaned, deduplicated, and inflation-adjusted datasets
-│   └── data_dictionary.md  # Schema definitions, variable descriptions, units
-├── notebooks/
-│   ├── 01_data_cleaning.ipynb
-│   ├── 02_eda_and_distributions.ipynb
-│   ├── 03_hypothesis_testing.ipynb
-│   └── 04_robustness_checks.ipynb
+│   ├── raw/                      # Unaltered source tables (Sources 01 to 07)
+│   └── processed/                # Cleaned, stacked, consolidated, and analysis-ready CSVs
+├── notebooks/                    # Exploratory notebooks and hypothesis testing workflows
 ├── src/
-│   ├── utils.py            # Helper scripts (currency standardization, matching)
-│   └── stats_models.py     # Bootstrap functions and regression routines
-├── reports/
-│   ├── figures/            # Visualizations, boxplots, CI intervals
-│   └── final_report.pdf
-├── requirements.txt
-└── README.md
+│   ├── clean_data.py             # Stacking, currency standardization, and IMDb enrichment
+│   ├── consolidate_data.py       # Hierarchical conflict resolution and deduplication
+│   ├── generate_compact.py       # Compact 7-column projection generator
+│   ├── filter_subset.py          # Strict completeness filtering and year stripping
+│   └── eda_analysis.py           # Statistical summary generation and Kruskal-Wallis tests
+├── figures/                      # Generated multi-panel visual analyses and distribution plots
+├── requirements.txt              # Project Python dependencies
+└── README.md                     # Project documentation and process evolution
