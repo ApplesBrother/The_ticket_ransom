@@ -29,9 +29,9 @@ We examine the commercial dynamics of Indian cinema by studying how a film's **g
    * Primary Target: **Revenue-to-Budget Ratio** (financial multiplier / return on investment proxy).
    * Secondary Metric: **IMDb Ratings & User Votes** (critical vs. commercial divergence).
 3. **Statistical Techniques:**
-   * **Bootstrapping & Confidence Intervals:** Evaluating genre-wise median revenue-to-budget distributions without assuming normality[cite: 1].
-   * **Multivariate Regression & Controls:** Isolating genre coefficients while controlling for release year, runtime, star cast, and original language[cite: 1].
-   * **Sensitivity Analysis:** Auditing genuine high-grossing outliers and testing model stability with and without extreme data points[cite: 1].
+   * **Bootstrapping & Confidence Intervals:** Evaluating genre-wise median revenue-to-budget distributions without assuming normality.
+   * **Multivariate Regression & Controls:** Isolating genre coefficients while controlling for release year, runtime, star cast, and original language.
+   * **Sensitivity Analysis:** Auditing genuine high-grossing outliers and testing model stability with and without extreme data points.
 
 ---
 
