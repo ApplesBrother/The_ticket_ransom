@@ -4,12 +4,10 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import os
 
-FIG_DIR = "figures"  # saved outside data/, at the project root
+FIG_DIR = "figures"
 os.makedirs(FIG_DIR, exist_ok=True)
 
-# ==========================================
-# 1. LOAD & CLEAN DATA
-# ==========================================
+# LOAD & CLEAN DATA
 df = pd.read_csv("data/processed/recalculated_data.csv")
 df.columns = df.columns.str.strip()
 
@@ -29,11 +27,9 @@ df = df.dropna(subset=["rating", "budget", "ratio", "year", "genres"])
 df = df[df["budget"] > 0].copy()
 df["year"] = df["year"].astype(int)
 
-# ==========================================
-# 2. APPLY HARDCODED FILTERS
-# ==========================================
-MIN_BUDGET, MAX_BUDGET = 0.5, 5000.0     # in Crores
-MIN_REVENUE, MAX_REVENUE = 0.5, 5000.0  # in Crores
+# APPLY HARDCODED FILTERS
+MIN_BUDGET, MAX_BUDGET = 0.5, 5000.0
+MIN_REVENUE, MAX_REVENUE = 0.5, 5000.0 
 MIN_RATIO, MAX_RATIO = 0.05, 20.0
 
 df = df[
@@ -55,9 +51,7 @@ min_yr, max_yr = df['year'].min(), df['year'].max()
 
 sns.set_theme(style="whitegrid")
 
-# ==========================================
-# 3. PLOT 1 & 2: Bar Graphs (Median & Mean)
-# ==========================================
+# Bar Graphs (Median & Mean)
 fig, axes = plt.subplots(1, 2, figsize=(16, 6))
 
 sns.barplot(data=df, x='genres', y='ratio', estimator=np.median, order=genre_order, errorbar=None, color='#4C72B0', ax=axes[0])
@@ -74,9 +68,7 @@ plt.tight_layout()
 plt.savefig(os.path.join(FIG_DIR, "01_median_mean_roi_by_genre.png"), dpi=300, bbox_inches="tight")
 plt.show()
 
-# ==========================================
-# 4. PLOT 3: 8-Panel Histogram (ROI Number Density)
-# ==========================================
+# 8-Panel Histogram (ROI Number Density)
 fig, axes = plt.subplots(2, 4, figsize=(20, 10))
 fig.suptitle('Number Density Distribution of ROI (Log Scale)', fontsize=16, fontweight='bold')
 axes = axes.flatten()
@@ -102,9 +94,7 @@ plt.tight_layout()
 plt.savefig(os.path.join(FIG_DIR, "02_roi_histogram_by_genre.png"), dpi=300, bbox_inches="tight")
 plt.show()
 
-# ==========================================
-# 5. PLOT 4: 8-Panel Bar Chart (Average ROI by Budget)
-# ==========================================
+# 8-Panel Bar Chart (Average ROI by Budget)
 bins = [0, 10, 30, 50, 100, 250, np.inf]
 labels = ['0-10', '10-30', '30-50', '50-100', '100-250', '250+']
 df['budget_section'] = pd.cut(df['budget'], bins=bins, labels=labels)
@@ -135,9 +125,7 @@ plt.tight_layout()
 plt.savefig(os.path.join(FIG_DIR, "03_avg_roi_by_budget_section.png"), dpi=300, bbox_inches="tight")
 plt.show()
 
-# ==========================================
-# 6. PLOT 5: Box Plot (Log Scale)
-# ==========================================
+# Box Plot (Log Scale)
 plt.figure(figsize=(11, 6))
 sns.boxplot(data=df_log, x='genres', y='ratio', order=genre_order, color='#8172B3', fliersize=4)
 plt.title('Distribution of ROI Ratio by Genre (Log Scale)', fontsize=14, fontweight='bold')
@@ -148,9 +136,7 @@ plt.tight_layout()
 plt.savefig(os.path.join(FIG_DIR, "04_roi_boxplot_by_genre.png"), dpi=300, bbox_inches="tight")
 plt.show()
 
-# ==========================================
-# 7. PLOT 6: Scatter (Rating vs Ratio - Log Scale)
-# ==========================================
+# Scatter (Rating vs Ratio - Log Scale)
 plt.figure(figsize=(11, 6))
 sns.scatterplot(data=df_log, x='rating', y='ratio', hue='genres', alpha=0.7)
 plt.title('ROI Ratio vs IMDb Rating (Log Scale)', fontsize=14, fontweight='bold')
@@ -161,9 +147,7 @@ plt.tight_layout()
 plt.savefig(os.path.join(FIG_DIR, "05_roi_vs_imdb_rating.png"), dpi=300, bbox_inches="tight")
 plt.show()
 
-# ==========================================
-# 8. PLOT 7: 8-Panel Line Graph (Year vs Average Ratio - Log Scale)
-# ==========================================
+# 8-Panel Line Graph (Year vs Average Ratio - Log Scale)
 fig, axes = plt.subplots(2, 4, figsize=(20, 10))
 fig.suptitle('Average ROI Ratio Over Time (Log Scale)', fontsize=16, fontweight='bold')
 axes = axes.flatten()
@@ -186,7 +170,7 @@ for i, panel in enumerate(grid_panels):
     ax.set_yscale('log')
     ax.axhline(1, color='red', linestyle='--')
     
-    # Lock the X-axis across all panels so the timelines perfectly align
+    # Lock the X-axis
     ax.set_xlim(min_yr - 0.5, max_yr + 0.5)
     ax.set_xticks(range(min_yr, max_yr + 1))
     ax.tick_params(axis='x', rotation=45)
