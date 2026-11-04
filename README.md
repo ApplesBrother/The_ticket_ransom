@@ -104,8 +104,7 @@ Seven open-source datasets are included in `data/raw/`:
 │   ├── filter_movies.py              # Missing-value and ROI-range filtering
 │   └── final_+++.py                  # Final filters and generation of all figures
 ├── figures/                          # Six generated plots (01 to 06)
-├── report/                           # Project report
-├── Checkpoint 1 Report.pdf           # Checkpoint 1 write-up
+├── report/                           # Project reports and ppt
 ├── requirements.txt                  # Python dependencies
 └── README.md
 ```
