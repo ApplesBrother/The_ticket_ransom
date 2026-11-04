@@ -1,8 +1,6 @@
+os
+re
 pandas
 numpy
-scipy
-statsmodels
 matplotlib
 seaborn
-jupyter
-kagglehub
