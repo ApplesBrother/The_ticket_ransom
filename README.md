@@ -106,6 +106,8 @@ Seven open-source datasets are included in `data/raw/`:
 ├── figures/                          # Six generated plots (01 to 06)
 ├── report/                           # Project reports and ppt
 ├── requirements.txt                  # Python dependencies
+├── Bollywood_ROI_DAI_Presentation_Extended # PPT
+├── .gitignore
 └── README.md
 ```
 
